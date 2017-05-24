@@ -122,6 +122,12 @@ public class RangeSlider: UIControl {
         }
     }
     
+    @IBInspectable public var trackHeightFactor: CGFloat = 2.3 {
+        didSet {
+            trackLayer.setNeedsDisplay()
+        }
+    }
+    
     var gapBetweenThumbs: Double {
         return 0.5 * Double(thumbWidth) * (maximumValue - minimumValue) / Double(bounds.width)
     }
@@ -226,7 +232,7 @@ public class RangeSlider: UIControl {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         
-        trackLayer.frame = bounds.insetBy(dx: 0.0, dy: bounds.height/2.3)
+        trackLayer.frame = bounds.insetBy(dx: 0.0, dy: bounds.height/trackHeightFactor)
         trackLayer.setNeedsDisplay()
         
         let lowerThumbCenter = CGFloat(positionForValue(lowerValue))
