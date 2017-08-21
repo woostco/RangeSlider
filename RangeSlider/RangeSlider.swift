@@ -44,16 +44,21 @@ class RangeSliderThumbLayer: CALayer {
         }
     }
     weak var rangeSlider: RangeSlider?
-    
-    var strokeColor: UIColor = UIColor.gray {
-        didSet {
-            setNeedsDisplay()
-        }
+        
+    override init() {
+        super.init()
+        setup()
     }
-    var lineWidth: CGFloat = 0.5 {
-        didSet {
-            setNeedsDisplay()
-        }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    func setup() {
+        self.shadowOpacity = 0.25
+        self.shadowOffset = CGSize(width: 0, height: 1)
+        self.shadowRadius = 2
     }
     
     override func draw(in ctx: CGContext) {
@@ -69,12 +74,6 @@ class RangeSliderThumbLayer: CALayer {
         ctx.setFillColor(slider.thumbTintColor.cgColor)
         ctx.addPath(thumbPath.cgPath)
         ctx.fillPath()
-        
-        // Outline
-        ctx.setStrokeColor(strokeColor.cgColor)
-        ctx.setLineWidth(lineWidth)
-        ctx.addPath(thumbPath.cgPath)
-        ctx.strokePath()
         
         if highlighted {
             ctx.setFillColor(UIColor(white: 0.0, alpha: 0.1).cgColor)
@@ -148,20 +147,6 @@ public class RangeSlider: UIControl {
         didSet {
             lowerThumbLayer.setNeedsDisplay()
             upperThumbLayer.setNeedsDisplay()
-        }
-    }
-    
-    @IBInspectable public var thumbBorderColor: UIColor = UIColor.gray {
-        didSet {
-            lowerThumbLayer.strokeColor = thumbBorderColor
-            upperThumbLayer.strokeColor = thumbBorderColor
-        }
-    }
-    
-    @IBInspectable public var thumbBorderWidth: CGFloat = 0.5 {
-        didSet {
-            lowerThumbLayer.lineWidth = thumbBorderWidth
-            upperThumbLayer.lineWidth = thumbBorderWidth
         }
     }
     
